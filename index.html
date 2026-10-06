@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173f50">
+    <meta name="description" content="A calm, friendly way for Year 4 pupils to practise multiplication tables and the timing of the Multiplication Tables Check.">
+    <title>Times Table Trail</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header">
+      <button class="brand" id="brand-home" type="button" aria-label="Times Table Trail, go to home">
+        <span class="brand-mark" aria-hidden="true"><span>×</span></span>
+        <span>Times Table Trail</span>
+      </button>
+      <p class="privacy-note"><span aria-hidden="true">●</span> No sign-in. No personal data.</p>
+    </header>
+
+    <main id="main" class="main-shell">
+      <section class="screen home-screen" id="home-screen" aria-labelledby="home-title">
+        <div class="home-copy">
+          <p class="eyebrow">Small steps. Stronger tables.</p>
+          <h1 id="home-title" tabindex="-1">Ready to make times tables <span>click?</span></h1>
+          <p class="lead">Choose a calm practice session or try the timing of a real Multiplication Tables Check.</p>
+          <div class="number-trail" aria-hidden="true">
+            <span>6 × 7</span><span>9 × 4</span><span>12 × 3</span>
+          </div>
+        </div>
+
+        <div class="mode-grid" aria-label="Choose a practice mode">
+          <article class="mode-card mock-card">
+            <span class="card-number" aria-hidden="true">01</span>
+            <div class="card-icon" aria-hidden="true">⏱</div>
+            <p class="card-kicker">Like the check</p>
+            <h2>Mock MTC</h2>
+            <p>Three warm-ups, then 25 questions with six seconds for each answer.</p>
+            <button class="button button-primary" id="open-mock" type="button">Try a mock check <span aria-hidden="true">→</span></button>
+          </article>
+
+          <article class="mode-card practice-card">
+            <span class="card-number" aria-hidden="true">02</span>
+            <div class="card-icon" aria-hidden="true">✦</div>
+            <p class="card-kicker">At your pace</p>
+            <h2>Practice tables</h2>
+            <p>Pick the tables you want and get helpful feedback after every answer.</p>
+            <button class="button button-secondary" id="open-practice" type="button">Choose your tables <span aria-hidden="true">→</span></button>
+          </article>
+        </div>
+
+        <aside class="calm-note">
+          <span class="calm-note-icon" aria-hidden="true">☀</span>
+          <p><strong>There’s no leaderboard here.</strong> This is your space to practise, notice what you know and keep going.</p>
+        </aside>
+      </section>
+
+      <section class="screen narrow-screen" id="mock-intro-screen" aria-labelledby="mock-intro-title" hidden>
+        <button class="text-button back-home" type="button"><span aria-hidden="true">←</span> Back home</button>
+        <div class="intro-card">
+          <p class="eyebrow">Mock MTC</p>
+          <h1 id="mock-intro-title" tabindex="-1">Here’s what will happen</h1>
+          <p class="lead">Start with 3 warm-up questions. Then you’ll answer 25 questions that count towards your score.</p>
+          <ol class="steps-list">
+            <li><span>1</span><div><strong>See one question</strong><p>Only the question and answer pad are shown.</p></div></li>
+            <li><span>2</span><div><strong>You have 6 seconds</strong><p>The timer shows both a number and a progress bar.</p></div></li>
+            <li><span>3</span><div><strong>Take a 3-second pause</strong><p>Your answer won’t be marked until the end.</p></div></li>
+          </ol>
+          <div class="info-box"><span aria-hidden="true">i</span><p>This is an independent practice tool. It is not an official Department for Education service.</p></div>
+          <button class="button button-primary button-wide" id="start-mock" type="button">Start the warm-up <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <section class="screen narrow-screen" id="practice-setup-screen" aria-labelledby="practice-setup-title" hidden>
+        <button class="text-button back-home" type="button"><span aria-hidden="true">←</span> Back home</button>
+        <div class="intro-card">
+          <p class="eyebrow">Practice tables</p>
+          <h1 id="practice-setup-title" tabindex="-1">What shall we practise?</h1>
+          <p class="lead">Choose one table, a few tables, or all of them. You can take as long as you need.</p>
+          <form id="practice-form" novalidate>
+            <fieldset class="table-picker" aria-describedby="table-error">
+              <legend>Choose your tables</legend>
+              <div class="table-options" id="table-options"></div>
+              <label class="all-tables-option">
+                <input type="checkbox" id="all-tables" name="all-tables" aria-describedby="table-error">
+                <span><strong>All tables</strong><small>2 to 12</small></span>
+              </label>
+              <p class="field-error" id="table-error"></p>
+            </fieldset>
+
+            <label class="toggle-row" for="timed-practice">
+              <span><strong>Timed practice</strong><small>Six seconds for each question</small></span>
+              <span class="switch"><input type="checkbox" id="timed-practice" name="timed-practice"><span aria-hidden="true"></span></span>
+            </label>
+
+            <button class="button button-primary button-wide" type="submit">Start practising <span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="screen game-screen" id="game-screen" aria-labelledby="game-title" hidden>
+        <h1 class="sr-only" id="game-title" tabindex="-1">Times table question</h1>
+        <div class="game-topbar">
+          <div>
+            <p class="game-mode" id="game-mode">Warm-up</p>
+            <p class="game-progress" id="game-progress">Question 1 of 3</p>
+          </div>
+          <button class="text-button end-practice" id="end-practice" type="button" hidden>End session</button>
+          <div class="timer-readout" id="timer-readout">
+            <span id="timer-label">Time to answer</span>
+            <strong id="timer-seconds">6</strong><span aria-hidden="true">s</span>
+          </div>
+        </div>
+
+        <div class="timer-track" id="timer-track" aria-hidden="true"><span id="timer-bar"></span></div>
+
+        <div class="question-stage">
+          <div class="question-card">
+            <p class="question-prompt">What is</p>
+            <p class="question" id="question-text" aria-live="polite">7 × 8</p>
+            <form class="answer-form" id="answer-form" novalidate>
+              <label for="answer-input">Your answer</label>
+              <input id="answer-input" name="answer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" spellcheck="false" aria-describedby="question-text">
+              <button class="button button-primary submit-answer" id="submit-answer" type="submit">Submit answer</button>
+            </form>
+
+            <div class="feedback" id="feedback" tabindex="-1" hidden>
+              <p class="feedback-title" id="feedback-title"></p>
+              <p id="feedback-detail"></p>
+              <button class="button button-primary" id="next-practice" type="button">Next question <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+
+          <div class="keypad" id="keypad" aria-label="Number pad">
+            <button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button>
+            <button type="button" data-key="4">4</button><button type="button" data-key="5">5</button><button type="button" data-key="6">6</button>
+            <button type="button" data-key="7">7</button><button type="button" data-key="8">8</button><button type="button" data-key="9">9</button>
+            <button class="keypad-clear" type="button" data-key="clear">Delete<span class="sr-only"> last digit</span></button>
+            <button type="button" data-key="0">0</button>
+            <button class="keypad-submit" type="button" data-key="submit">Go<span class="sr-only">, submit answer</span></button>
+          </div>
+        </div>
+        <p class="game-status" id="game-status" role="status"></p>
+      </section>
+
+      <section class="screen narrow-screen" id="mock-ready-screen" aria-labelledby="mock-ready-title" hidden>
+        <div class="intro-card ready-card">
+          <span class="ready-icon" aria-hidden="true">✓</span>
+          <p class="eyebrow">Warm-up complete</p>
+          <h1 id="mock-ready-title" tabindex="-1">Ready for the 25 questions?</h1>
+          <p class="lead">Your score starts now. Remember: have a go, then let the next question come to you.</p>
+          <button class="button button-primary button-wide" id="start-scored" type="button">Start the mock check <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <section class="screen results-screen" id="results-screen" aria-labelledby="results-title" hidden>
+        <div class="results-hero">
+          <p class="eyebrow">Mock complete</p>
+          <h1 id="results-title" tabindex="-1">You kept going—well done.</h1>
+          <div class="score-lockup"><strong id="result-score">0</strong><span>/ 25</span></div>
+          <p class="percentage" id="result-percentage">0%</p>
+          <p class="result-message" id="result-message"></p>
+          <div class="results-actions">
+            <button class="button button-primary" id="retry-mock" type="button">Try another mock</button>
+            <button class="button button-quiet back-home" type="button">Return home</button>
+          </div>
+        </div>
+        <section class="review-section" aria-labelledby="review-title">
+          <div class="review-heading"><div><p class="eyebrow">Your answers</p><h2 id="review-title">Question review</h2></div><p>Correct, incorrect and unanswered questions are labelled with words as well as symbols.</p></div>
+          <ol class="review-list" id="review-list"></ol>
+        </section>
+      </section>
+
+      <section class="screen narrow-screen" id="practice-summary-screen" aria-labelledby="practice-summary-title" hidden>
+        <div class="intro-card ready-card">
+          <span class="ready-icon" aria-hidden="true">★</span>
+          <p class="eyebrow">Practice complete</p>
+          <h1 id="practice-summary-title" tabindex="-1">Good work sticking with it.</h1>
+          <p class="practice-summary-score" id="practice-summary-score"></p>
+          <div class="results-actions">
+            <button class="button button-primary" id="practice-again" type="button">New practice session</button>
+            <button class="button button-quiet back-home" type="button">Return home</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Made for practice, not pressure.</p>
+      <p>Independent practice tool — not affiliated with or endorsed by the Department for Education.</p>
+    </footer>
+  </body>
+</html>

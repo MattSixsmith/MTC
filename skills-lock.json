@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "better-accessibility": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "skillPath": "skills/better-accessibility/SKILL.md",
+      "computedHash": "d3eedb76ab320be6d59e08b947221c9679d5452b4e4d8f46cb8bc67f05b9a755"
+    },
+    "web-design-studio": {
+      "source": "xiaodong-wu/web-design-studio",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-studio/SKILL.md",
+      "computedHash": "5f9ac6c5cd8fe4cb0a024992cf78944cfd8197c74225ed6d8d80fec30ea66656"
+    }
+  }
+}

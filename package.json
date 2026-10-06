@@ -1,0 +1,11 @@
+{
+  "name": "times-table-trail",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/question-generator.test.js test/timed-question-cycle.test.js",
+    "test:browser": "node test/browser-flow.mjs && node test/responsive-check.mjs"
+  }
+}

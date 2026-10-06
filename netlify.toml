@@ -1,0 +1,4 @@
+# Times Table Trail is a plain static site; no build step is required.
+[build]
+  base = "."
+  publish = "."

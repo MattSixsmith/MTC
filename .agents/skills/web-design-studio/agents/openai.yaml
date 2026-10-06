@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Design Studio"
+  short_description: "Build static sites with original Codex imagery"
+  default_prompt: "Use $web-design-studio to build a distinctive, production-ready static website with original Codex-generated raster assets."
