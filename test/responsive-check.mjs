@@ -130,5 +130,24 @@ for (const width of [320, 390, 768, 1440]) {
 
 }
 
+for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 700 }]) {
+  await send("Emulation.setDeviceMetricsOverride", { ...viewport, deviceScaleFactor: 1, mobile: true });
+  await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  await send("Page.navigate", { url: "http://127.0.0.1:4173" });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  const home = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, actionsVisible: [...document.querySelectorAll('.mode-card button')].every((button) => button.getBoundingClientRect().bottom <= innerHeight), footerVisible: document.querySelector('.site-footer').getBoundingClientRect().bottom <= innerHeight })");
+  assert.ok(home.scrollWidth <= home.innerWidth, `Home overflows horizontally at ${viewport.width}x${viewport.height}: ${JSON.stringify(home)}`);
+  assert.ok(home.scrollHeight <= home.innerHeight, `Home should fit at ${viewport.width}x${viewport.height}: ${JSON.stringify(home)}`);
+  assert.equal(home.actionsVisible, true, `Home actions should be visible at ${viewport.width}x${viewport.height}`);
+  assert.equal(home.footerVisible, true, `Home footer should be visible at ${viewport.width}x${viewport.height}`);
+
+  if (process.env.CAPTURE_SCREENSHOTS === "1") {
+    const { writeFileSync } = await import("node:fs");
+    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    writeFileSync(`home-${viewport.width}x${viewport.height}.png`, Buffer.from(shot.data, "base64"));
+  }
+}
+
 socket.close();
-console.log("Responsive check passed at 320px, 390px, 768px and 1440px for home and question screens.");
+console.log("Responsive check passed at phone, short iPad, iPad landscape and desktop sizes.");

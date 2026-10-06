@@ -40,6 +40,13 @@ body {
   line-height: 1.55;
 }
 
+body.is-home {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
 button,
 input { font: inherit; }
 
@@ -126,6 +133,11 @@ input:focus-visible,
 .brand-mark span { transform: rotate(3deg); }
 
 .main-shell { min-height: calc(100vh - 12rem); }
+
+.is-home .main-shell {
+  min-height: 0;
+  flex: 1;
+}
 
 .screen { padding-block: clamp(2.5rem, 7vw, 6rem); }
 
@@ -792,6 +804,26 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   .review-status { grid-column: 2 / -1; }
   .mock-intro-hero { grid-template-columns: minmax(0, 1fr) 8rem; }
   .timer-demo-face { width: 7rem; }
+}
+
+@media (min-width: 38.01rem) and (max-height: 52rem) {
+  .is-home .site-header { min-height: 4.5rem; }
+  .is-home .home-screen { padding-block: 0.75rem; }
+  .is-home .home-screen h1 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(2.6rem, 6vw, 3.25rem);
+  }
+  .is-home .number-trail { display: none; }
+  .is-home .mode-grid { margin-top: 1rem; }
+  .is-home .mode-card { padding: 1rem 1.15rem; }
+  .is-home .card-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .is-home .mode-card h2 { margin-bottom: 0.4rem; }
+  .is-home .mode-card > p:not(.card-kicker) { margin-bottom: 0.75rem; }
+  .is-home .site-footer { padding-block: 0.75rem; }
 }
 
 @media (max-width: 38rem) {
