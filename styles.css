@@ -47,6 +47,13 @@ body.is-home {
   flex-direction: column;
 }
 
+body.is-mock-intro {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
 button,
 input { font: inherit; }
 
@@ -135,6 +142,11 @@ input:focus-visible,
 .main-shell { min-height: calc(100vh - 12rem); }
 
 .is-home .main-shell {
+  min-height: 0;
+  flex: 1;
+}
+
+.is-mock-intro .main-shell {
   min-height: 0;
   flex: 1;
 }
@@ -824,6 +836,38 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   .is-home .mode-card h2 { margin-bottom: 0.4rem; }
   .is-home .mode-card > p:not(.card-kicker) { margin-bottom: 0.75rem; }
   .is-home .site-footer { padding-block: 0.75rem; }
+
+  .is-mock-intro .site-header { min-height: 4.5rem; }
+  .is-mock-intro .mock-intro-screen { padding-block: 0.25rem 0.5rem; }
+  .is-mock-intro .mock-intro-screen .back-home { margin-bottom: 0.25rem; }
+  .is-mock-intro .mock-intro-hero {
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    gap: 1.5rem;
+    min-height: 0;
+    padding: 1rem 2rem 2.25rem;
+  }
+  .is-mock-intro .mock-intro-hero h1 {
+    max-width: none;
+    margin-bottom: 0.4rem;
+    font-size: 2.5rem;
+  }
+  .is-mock-intro .mock-intro-hero .lead { font-size: 1rem; }
+  .is-mock-intro .timer-demo { gap: 0.25rem; }
+  .is-mock-intro .timer-demo-face {
+    width: 5.5rem;
+    border-width: 0.4rem;
+  }
+  .is-mock-intro .timer-demo-face strong { font-size: 2.35rem; }
+  .is-mock-intro .timer-demo > p { font-size: 0.8rem; }
+  .is-mock-intro .mock-facts { margin: -1.4rem 1.5rem 0; }
+  .is-mock-intro .mock-facts li { padding: 0.5rem 0.75rem; }
+  .is-mock-intro .mock-facts strong { font-size: 1.3rem; }
+  .is-mock-intro .mock-guide { padding: 0.75rem 1.5rem; }
+  .is-mock-intro .mock-guide h2 { font-size: 1.4rem; }
+  .is-mock-intro .mock-guide .steps-list { margin-top: 0.6rem; }
+  .is-mock-intro .mock-guide .steps-list li { padding: 0.55rem; }
+  .is-mock-intro .mock-intro-footer { padding: 0.55rem 1.5rem; }
+  .is-mock-intro .site-footer { padding-block: 0.75rem; }
 }
 
 @media (max-width: 38rem) {

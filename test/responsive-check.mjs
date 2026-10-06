@@ -147,6 +147,19 @@ for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 700 
     const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     writeFileSync(`home-${viewport.width}x${viewport.height}.png`, Buffer.from(shot.data, "base64"));
   }
+
+  await evaluate("document.querySelector('#open-mock').click()");
+  const mockIntro = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, startVisible: document.querySelector('#start-mock').getBoundingClientRect().bottom <= innerHeight, footerVisible: document.querySelector('.site-footer').getBoundingClientRect().bottom <= innerHeight })");
+  assert.ok(mockIntro.scrollWidth <= mockIntro.innerWidth, `Mock intro overflows horizontally at ${viewport.width}x${viewport.height}: ${JSON.stringify(mockIntro)}`);
+  assert.ok(mockIntro.scrollHeight <= mockIntro.innerHeight, `Mock intro should fit at ${viewport.width}x${viewport.height}: ${JSON.stringify(mockIntro)}`);
+  assert.equal(mockIntro.startVisible, true, `Mock intro start action should be visible at ${viewport.width}x${viewport.height}`);
+  assert.equal(mockIntro.footerVisible, true, `Mock intro footer should be visible at ${viewport.width}x${viewport.height}`);
+
+  if (process.env.CAPTURE_SCREENSHOTS === "1") {
+    const { writeFileSync } = await import("node:fs");
+    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    writeFileSync(`mock-intro-${viewport.width}x${viewport.height}.png`, Buffer.from(shot.data, "base64"));
+  }
 }
 
 socket.close();
