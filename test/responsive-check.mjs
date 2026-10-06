@@ -100,6 +100,23 @@ for (const width of [320, 390, 768, 1440]) {
     );
   }
 
+  await send("Page.navigate", { url: "http://127.0.0.1:4173" });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  await evaluate("document.querySelector('#open-practice').click()");
+  const practiceSetup = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, tables: document.querySelectorAll('#table-options input').length, startVisible: document.querySelector('#practice-form button[type=\"submit\"]').getBoundingClientRect().bottom <= innerHeight })");
+  assert.ok(practiceSetup.scrollWidth <= practiceSetup.innerWidth, `Practice setup overflows at ${width}px: ${JSON.stringify(practiceSetup)}`);
+  assert.equal(practiceSetup.tables, 11, "Practice setup should show all eleven table choices");
+  if (width === 768) {
+    assert.ok(practiceSetup.scrollHeight <= practiceSetup.innerHeight, `Practice setup should fit within an iPad viewport: ${JSON.stringify(practiceSetup)}`);
+    assert.equal(practiceSetup.startVisible, true, "The practice start button should be visible without scrolling on iPad");
+  }
+
+  if (process.env.CAPTURE_SCREENSHOTS === "1" && width === 768) {
+    const { writeFileSync } = await import("node:fs");
+    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    writeFileSync("practice-setup-768.png", Buffer.from(shot.data, "base64"));
+  }
+
 }
 
 socket.close();

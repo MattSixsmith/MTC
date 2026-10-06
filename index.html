@@ -90,27 +90,32 @@
         </div>
       </section>
 
-      <section class="screen narrow-screen" id="practice-setup-screen" aria-labelledby="practice-setup-title" hidden>
+      <section class="screen practice-setup-screen" id="practice-setup-screen" aria-labelledby="practice-setup-title" hidden>
         <button class="text-button back-home" type="button"><span aria-hidden="true">←</span> Back home</button>
-        <div class="intro-card">
-          <p class="eyebrow">Practice tables</p>
-          <h1 id="practice-setup-title" tabindex="-1">What shall we practise?</h1>
-          <p class="lead">Choose one table, a few tables, or all of them. You can take as long as you need.</p>
+        <div class="intro-card practice-setup-card">
+          <div class="practice-setup-heading">
+            <p class="eyebrow">Practice tables</p>
+            <h1 id="practice-setup-title" tabindex="-1">What shall we practise?</h1>
+            <p class="lead">Pick one table, a few, or all of them. There’s no time limit unless you choose one.</p>
+          </div>
           <form id="practice-form" novalidate>
             <fieldset class="table-picker" aria-describedby="table-error">
               <legend>Choose your tables</legend>
               <div class="table-options" id="table-options"></div>
+              <p class="field-error" id="table-error"></p>
+            </fieldset>
+
+            <div class="practice-settings">
               <label class="all-tables-option">
                 <input type="checkbox" id="all-tables" name="all-tables" aria-describedby="table-error">
                 <span><strong>All tables</strong><small>2 to 12</small></span>
               </label>
-              <p class="field-error" id="table-error"></p>
-            </fieldset>
 
-            <label class="toggle-row" for="timed-practice">
-              <span><strong>Timed practice</strong><small>Six seconds for each question</small></span>
-              <span class="switch"><input type="checkbox" id="timed-practice" name="timed-practice"><span aria-hidden="true"></span></span>
-            </label>
+              <label class="toggle-row" for="timed-practice">
+                <span><strong>Timed practice</strong><small>Six seconds for each question</small></span>
+                <span class="switch"><input type="checkbox" id="timed-practice" name="timed-practice"><span aria-hidden="true"></span></span>
+              </label>
+            </div>
 
             <button class="button button-primary button-wide" type="submit">Start practising <span aria-hidden="true">→</span></button>
           </form>
