@@ -6,6 +6,15 @@ const PAUSE_MS = 3000;
 const MOCK_WARMUP_COUNT = 3;
 const MOCK_QUESTION_COUNT = 25;
 
+function syncViewportHeight() {
+  const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+  document.documentElement.style.setProperty("--app-viewport-height", `${Math.floor(viewportHeight)}px`);
+}
+
+syncViewportHeight();
+window.addEventListener("resize", syncViewportHeight);
+window.visualViewport?.addEventListener("resize", syncViewportHeight);
+
 const screens = [...document.querySelectorAll(".screen")];
 const homeScreen = document.querySelector("#home-screen");
 const mockIntroScreen = document.querySelector("#mock-intro-screen");

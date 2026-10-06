@@ -130,7 +130,7 @@ for (const width of [320, 390, 768, 1440]) {
 
 }
 
-for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 700 }]) {
+for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 768 }, { width: 1024, height: 700 }, { width: 1024, height: 640 }]) {
   await send("Emulation.setDeviceMetricsOverride", { ...viewport, deviceScaleFactor: 1, mobile: true });
   await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
   await send("Page.navigate", { url: "http://127.0.0.1:4173" });

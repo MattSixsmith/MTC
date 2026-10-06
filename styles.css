@@ -41,15 +41,15 @@ body {
 }
 
 body.is-home {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: -webkit-fill-available;
+  min-height: var(--app-viewport-height, 100svh);
   display: flex;
   flex-direction: column;
 }
 
 body.is-mock-intro {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: -webkit-fill-available;
+  min-height: var(--app-viewport-height, 100svh);
   display: flex;
   flex-direction: column;
 }
