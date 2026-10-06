@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { writeFileSync } from "node:fs";
 
 const pages = await fetch("http://127.0.0.1:9223/json/list").then((response) => response.json());
 const page = pages.find((item) => item.type === "page" && item.url.startsWith("http"))
@@ -39,19 +38,43 @@ await send("Page.enable");
 
 for (const width of [320, 390, 768, 1440]) {
   await send("Emulation.setDeviceMetricsOverride", { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 });
+  await send("Emulation.setTouchEmulationEnabled", width <= 768
+    ? { enabled: true, maxTouchPoints: 5 }
+    : { enabled: false });
   await send("Page.navigate", { url: "http://127.0.0.1:4173" });
   await new Promise((resolve) => setTimeout(resolve, 300));
   const home = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth })");
   assert.ok(home.scrollWidth <= home.innerWidth, `Home overflows at ${width}px: ${JSON.stringify(home)}`);
 
+  const inputMode = await evaluate("({ readOnly: document.querySelector('#answer-input').readOnly, inputMode: document.querySelector('#answer-input').inputMode })");
+  if (width <= 768) {
+    assert.deepEqual(inputMode, { readOnly: true, inputMode: "none" }, `Touch keyboard is not suppressed at ${width}px`);
+  } else {
+    assert.deepEqual(inputMode, { readOnly: false, inputMode: "numeric" }, "Desktop answer input should remain editable");
+  }
+
   await evaluate("document.querySelector('#open-mock').click(); document.querySelector('#start-mock').click()");
   const game = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth })");
   assert.ok(game.scrollWidth <= game.innerWidth, `Game overflows at ${width}px: ${JSON.stringify(game)}`);
 
-  if (width === 390) {
-    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
-    writeFileSync("question-mobile.png", Buffer.from(shot.data, "base64"));
+  if (width === 768) {
+    await evaluate("document.querySelector('#answer-input').focus(); document.querySelector('#answer-input').dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }))");
+    assert.equal(await evaluate("document.querySelector('#answer-input').value"), "1", "An attached iPad keyboard should still enter digits");
+    await evaluate("document.querySelector('#answer-input').dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))");
+    assert.match(await evaluate("document.querySelector('#game-status').textContent"), /Answer saved/, "An attached iPad keyboard should still submit with Enter");
+    assert.deepEqual(
+      await evaluate("({ questionHidden: document.querySelector('#question-stage').hidden, pauseHidden: document.querySelector('#pause-stage').hidden, title: document.querySelector('#pause-title').textContent })"),
+      { questionHidden: true, pauseHidden: false, title: "Next question coming up" },
+      "The three-second interstitial should replace the answered question",
+    );
+    await new Promise((resolve) => setTimeout(resolve, 3100));
+    assert.deepEqual(
+      await evaluate("({ questionHidden: document.querySelector('#question-stage').hidden, pauseHidden: document.querySelector('#pause-stage').hidden, progress: document.querySelector('#game-progress').textContent })"),
+      { questionHidden: false, pauseHidden: true, progress: "Question 2 of 3" },
+      "The next question should replace the interstitial after three seconds",
+    );
   }
+
 }
 
 socket.close();

@@ -18,9 +18,18 @@ const answerForm = document.querySelector("#answer-form");
 const answerInput = document.querySelector("#answer-input");
 const feedback = document.querySelector("#feedback");
 const keypad = document.querySelector("#keypad");
+const questionStage = document.querySelector("#question-stage");
+const pauseStage = document.querySelector("#pause-stage");
 const timerReadout = document.querySelector("#timer-readout");
 const timerTrack = document.querySelector("#timer-track");
 const gameStatus = document.querySelector("#game-status");
+const usesBuiltInKeypad = navigator.maxTouchPoints > 0
+  || window.matchMedia("(any-pointer: coarse)").matches;
+
+// Touch devices use the large in-page keypad, so their operating-system
+// keyboard should not cover the timed question interface.
+answerInput.readOnly = usesBuiltInKeypad;
+answerInput.inputMode = usesBuiltInKeypad ? "none" : "numeric";
 
 const state = {
   mode: null,
@@ -93,6 +102,8 @@ function resetGameUi() {
   keypad.querySelectorAll("button").forEach((button) => { button.disabled = false; });
   answerForm.hidden = false;
   keypad.hidden = false;
+  questionStage.hidden = false;
+  pauseStage.hidden = true;
   feedback.hidden = true;
   gameStatus.textContent = "";
   document.querySelector("#timer-label").textContent = "Time to answer";
@@ -164,6 +175,7 @@ function updateTimer({ phase, remainingMs, totalMs }) {
   document.querySelector("#timer-seconds").textContent = String(seconds);
   document.querySelector("#timer-bar").style.transform = `scaleX(${ratio})`;
   document.querySelector("#timer-label").textContent = phase === "answer" ? "Time to answer" : "Next question in";
+  if (phase === "pause") document.querySelector("#pause-seconds").textContent = String(seconds);
   timerReadout.classList.toggle("is-pause", phase === "pause");
 }
 
@@ -203,9 +215,31 @@ function handleTimedAnswerEnd({ reason, answer }) {
       unanswered: reason === "timeout" || String(answer).trim() === "",
     });
     lockAnswerUi();
-    gameStatus.textContent = reason === "timeout" ? "Time is up. The next question is coming." : "Answer saved. The next question is coming.";
+    showMockPause(reason);
   } else {
     showPracticeFeedback(answer, reason === "timeout");
+  }
+}
+
+function showMockPause(reason) {
+  const hasAnotherQuestion = state.index + 1 < state.questions.length;
+  const outcome = reason === "timeout" ? "Time is up." : "Answer saved.";
+  questionStage.hidden = true;
+  pauseStage.hidden = false;
+  document.querySelector("#pause-kicker").textContent = reason === "timeout" ? "Time is up" : "Answer saved";
+
+  if (hasAnotherQuestion) {
+    document.querySelector("#pause-title").textContent = "Next question coming up";
+    document.querySelector("#pause-detail").textContent = `A short pause before question ${state.index + 2}.`;
+    gameStatus.textContent = `${outcome} The next question is coming.`;
+  } else if (state.stage === "warmup") {
+    document.querySelector("#pause-title").textContent = "Warm-up complete";
+    document.querySelector("#pause-detail").textContent = "Getting the scored questions ready.";
+    gameStatus.textContent = `${outcome} The warm-up is complete.`;
+  } else {
+    document.querySelector("#pause-title").textContent = "Mock complete";
+    document.querySelector("#pause-detail").textContent = "Putting your results together.";
+    gameStatus.textContent = `${outcome} The mock is complete.`;
   }
 }
 
@@ -360,15 +394,16 @@ document.querySelector("#end-practice").addEventListener("click", () => {
 
 window.addEventListener("keydown", (event) => {
   if (gameScreen.hidden || !state.acceptingAnswer || event.ctrlKey || event.metaKey || event.altKey) return;
-  if (/^\d$/.test(event.key) && document.activeElement !== answerInput) {
+  const handleKeyManually = document.activeElement !== answerInput || answerInput.readOnly;
+  if (/^\d$/.test(event.key) && handleKeyManually) {
     event.preventDefault();
     if (answerInput.value.length < 3) answerInput.value += event.key;
   }
-  if (event.key === "Backspace" && document.activeElement !== answerInput) {
+  if (event.key === "Backspace" && handleKeyManually) {
     event.preventDefault();
     answerInput.value = answerInput.value.slice(0, -1);
   }
-  if (event.key === "Enter" && document.activeElement !== answerInput && !event.target.closest("button")) {
+  if (event.key === "Enter" && handleKeyManually && !event.target.closest("button")) {
     event.preventDefault();
     submitCurrentAnswer(answerInput.value);
   }

@@ -116,7 +116,7 @@
 
         <div class="timer-track" id="timer-track" aria-hidden="true"><span id="timer-bar"></span></div>
 
-        <div class="question-stage">
+        <div class="question-stage" id="question-stage">
           <div class="question-card">
             <p class="question-prompt">What is</p>
             <p class="question" id="question-text" aria-live="polite">7 × 8</p>
@@ -142,6 +142,14 @@
             <button class="keypad-submit" type="button" data-key="submit">Go<span class="sr-only">, submit answer</span></button>
           </div>
         </div>
+
+        <section class="pause-stage" id="pause-stage" aria-labelledby="pause-title" hidden>
+          <div class="pause-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p class="pause-kicker" id="pause-kicker">Answer saved</p>
+          <h2 id="pause-title">Next question coming up</h2>
+          <p id="pause-detail">A short pause before the next question.</p>
+          <p class="pause-countdown"><strong id="pause-seconds">3</strong> seconds</p>
+        </section>
         <p class="game-status" id="game-status" role="status"></p>
       </section>
 
