@@ -220,14 +220,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 .mock-card { background: var(--blue); }
 .practice-card { background: var(--mint); }
 
-.card-number {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.4rem;
-  font-weight: 900;
-  opacity: 0.55;
-}
-
 .card-icon {
   width: 3.35rem;
   height: 3.35rem;
@@ -274,20 +266,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 .button-secondary { background: var(--white); }
 .button-quiet { background: transparent; box-shadow: none; }
 .button-wide { width: 100%; margin-top: 1.5rem; }
-
-.calm-note {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  max-width: 52rem;
-  margin: 3rem auto 0;
-  padding: 1rem 1.25rem;
-  border-top: 2px dashed rgba(23, 63, 80, 0.3);
-  border-bottom: 2px dashed rgba(23, 63, 80, 0.3);
-}
-
-.calm-note p { margin: 0; }
-.calm-note-icon { font-size: 1.8rem; color: var(--coral-deep); }
 
 .narrow-screen { width: min(100%, 48rem); margin-inline: auto; }
 .mock-intro-screen { width: min(100%, 66rem); margin-inline: auto; padding-block: clamp(0.75rem, 2vw, 1.25rem); }
