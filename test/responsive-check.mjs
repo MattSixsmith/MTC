@@ -136,11 +136,10 @@ for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 768 
   await send("Page.navigate", { url: "http://127.0.0.1:4173" });
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const home = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, actionsVisible: [...document.querySelectorAll('.mode-card button')].every((button) => button.getBoundingClientRect().bottom <= innerHeight), footerVisible: document.querySelector('.site-footer').getBoundingClientRect().bottom <= innerHeight })");
+  const home = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, actionsVisible: [...document.querySelectorAll('.mode-card button')].every((button) => button.getBoundingClientRect().bottom <= innerHeight) })");
   assert.ok(home.scrollWidth <= home.innerWidth, `Home overflows horizontally at ${viewport.width}x${viewport.height}: ${JSON.stringify(home)}`);
   assert.ok(home.scrollHeight <= home.innerHeight, `Home should fit at ${viewport.width}x${viewport.height}: ${JSON.stringify(home)}`);
   assert.equal(home.actionsVisible, true, `Home actions should be visible at ${viewport.width}x${viewport.height}`);
-  assert.equal(home.footerVisible, true, `Home footer should be visible at ${viewport.width}x${viewport.height}`);
 
   if (process.env.CAPTURE_SCREENSHOTS === "1") {
     const { writeFileSync } = await import("node:fs");
@@ -149,11 +148,10 @@ for (const viewport of [{ width: 768, height: 820 }, { width: 1024, height: 768 
   }
 
   await evaluate("document.querySelector('#open-mock').click()");
-  const mockIntro = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, startVisible: document.querySelector('#start-mock').getBoundingClientRect().bottom <= innerHeight, footerVisible: document.querySelector('.site-footer').getBoundingClientRect().bottom <= innerHeight })");
+  const mockIntro = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, startVisible: document.querySelector('#start-mock').getBoundingClientRect().bottom <= innerHeight })");
   assert.ok(mockIntro.scrollWidth <= mockIntro.innerWidth, `Mock intro overflows horizontally at ${viewport.width}x${viewport.height}: ${JSON.stringify(mockIntro)}`);
   assert.ok(mockIntro.scrollHeight <= mockIntro.innerHeight, `Mock intro should fit at ${viewport.width}x${viewport.height}: ${JSON.stringify(mockIntro)}`);
   assert.equal(mockIntro.startVisible, true, `Mock intro start action should be visible at ${viewport.width}x${viewport.height}`);
-  assert.equal(mockIntro.footerVisible, true, `Mock intro footer should be visible at ${viewport.width}x${viewport.height}`);
 
   if (process.env.CAPTURE_SCREENSHOTS === "1") {
     const { writeFileSync } = await import("node:fs");

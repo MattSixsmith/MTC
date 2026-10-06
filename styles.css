@@ -96,7 +96,6 @@ input:focus-visible,
 }
 
 .site-header,
-.site-footer,
 .main-shell {
   width: min(calc(100% - 2rem), 76rem);
   margin-inline: auto;
@@ -170,7 +169,6 @@ input:focus-visible,
   font-size: 1.35rem;
 }
 .is-home .mode-card > p:not(.card-kicker) { margin-bottom: 1.2rem; }
-.is-home .site-footer { padding-block: 1.25rem; }
 
 .home-copy { max-width: 54rem; }
 
@@ -480,8 +478,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   background: var(--paper-deep);
 }
 
-.is-mock-intro .site-footer { padding-block: 1.5rem; }
-.is-practice-setup .site-footer { padding-block: 1.5rem; }
 
 .steps-list {
   display: grid;
@@ -578,8 +574,7 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 .switch input:checked + span::after { transform: translateX(1.45rem); }
 .switch input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
 
-.is-playing .site-header,
-.is-playing .site-footer { display: none; }
+.is-playing .site-header { display: none; }
 .is-playing .main-shell { min-height: 100vh; }
 .game-screen { width: min(100%, 66rem); margin-inline: auto; padding-block: clamp(1rem, 4vw, 2.5rem); }
 
@@ -781,17 +776,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 
 .practice-summary-score { font-size: 1.25rem; font-weight: 800; }
 
-.site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-block: 2rem;
-  border-top: 2px solid rgba(23, 63, 80, 0.14);
-  color: var(--ink-soft);
-  font-size: 0.85rem;
-}
-.site-footer p { margin: 0; }
-
 @media (prefers-reduced-motion: no-preference) {
   .button,
   .keypad button { transition: filter 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
@@ -835,7 +819,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   }
   .is-home .mode-card h2 { margin-bottom: 0.4rem; }
   .is-home .mode-card > p:not(.card-kicker) { margin-bottom: 0.75rem; }
-  .is-home .site-footer { padding-block: 0.75rem; }
 
   .is-mock-intro .site-header { min-height: 4.5rem; }
   .is-mock-intro .mock-intro-screen { padding-block: 0.25rem 0.5rem; }
@@ -867,7 +850,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   .is-mock-intro .mock-guide .steps-list { margin-top: 0.6rem; }
   .is-mock-intro .mock-guide .steps-list li { padding: 0.55rem; }
   .is-mock-intro .mock-intro-footer { padding: 0.55rem 1.5rem; }
-  .is-mock-intro .site-footer { padding-block: 0.75rem; }
 }
 
 @media (max-width: 38rem) {
@@ -885,7 +867,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
   .review-item .review-question,
   .review-item .review-answer,
   .review-status { grid-column: 2; }
-  .site-footer { flex-direction: column; gap: 0.6rem; }
   .mock-intro-hero { grid-template-columns: 1fr; min-height: 0; padding-bottom: 4.5rem; }
   .timer-demo { grid-template-columns: auto 1fr; justify-items: start; }
   .timer-demo-face { width: 6.5rem; border-width: 0.5rem; }
@@ -903,7 +884,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 
 @media (max-width: 23rem) {
   .site-header,
-  .site-footer,
   .main-shell { width: min(calc(100% - 1rem), 76rem); }
   .number-trail { flex-wrap: wrap; }
   .intro-card,
