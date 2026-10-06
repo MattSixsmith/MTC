@@ -57,19 +57,46 @@
         </aside>
       </section>
 
-      <section class="screen narrow-screen" id="mock-intro-screen" aria-labelledby="mock-intro-title" hidden>
+      <section class="screen mock-intro-screen" id="mock-intro-screen" aria-labelledby="mock-intro-title" hidden>
         <button class="text-button back-home" type="button"><span aria-hidden="true">←</span> Back home</button>
-        <div class="intro-card">
-          <p class="eyebrow">Mock MTC</p>
-          <h1 id="mock-intro-title" tabindex="-1">Here’s what will happen</h1>
-          <p class="lead">Start with 3 warm-up questions. Then you’ll answer 25 questions that count towards your score.</p>
-          <ol class="steps-list">
-            <li><span>1</span><div><strong>See one question</strong><p>Only the question and answer pad are shown.</p></div></li>
-            <li><span>2</span><div><strong>You have 6 seconds</strong><p>The timer shows both a number and a progress bar.</p></div></li>
-            <li><span>3</span><div><strong>Take a 3-second pause</strong><p>Your answer won’t be marked until the end.</p></div></li>
-          </ol>
-          <div class="info-box"><span aria-hidden="true">i</span><p>This is an independent practice tool. It is not an official Department for Education service.</p></div>
-          <button class="button button-primary button-wide" id="start-mock" type="button">Start the warm-up <span aria-hidden="true">→</span></button>
+        <div class="intro-card mock-intro-card">
+          <div class="mock-intro-hero">
+            <div class="mock-intro-copy">
+              <p class="eyebrow">Mock MTC</p>
+              <h1 id="mock-intro-title" tabindex="-1">Your mock check, step by step</h1>
+              <p class="lead">Begin with 3 warm-up questions. Then answer 25 questions that count towards your score.</p>
+            </div>
+            <div class="timer-demo" aria-hidden="true">
+              <div class="timer-demo-face"><strong>6</strong><span>seconds</span></div>
+              <p>Time for each answer</p>
+            </div>
+          </div>
+
+          <ul class="mock-facts" aria-label="Mock check at a glance">
+            <li><strong>3</strong><span>Warm-up questions</span></li>
+            <li><strong>25</strong><span>Scored questions</span></li>
+            <li><strong>6 sec</strong><span>To answer</span></li>
+            <li><strong>3 sec</strong><span>Between questions</span></li>
+          </ul>
+
+          <section class="mock-guide" aria-labelledby="mock-guide-title">
+            <p class="eyebrow">How it works</p>
+            <h2 id="mock-guide-title">One question at a time</h2>
+            <ol class="steps-list">
+              <li><span>1</span><div><strong>Enter your answer</strong><p>Use your number keys or the big number pad on screen.</p></div></li>
+              <li><span>2</span><div><strong>Keep an eye on time</strong><p>You have 6 seconds. If time runs out, we’ll move on for you.</p></div></li>
+              <li><span>3</span><div><strong>Take a short pause</strong><p>A 3-second break appears before the next question.</p></div></li>
+            </ol>
+            <p class="marking-note"><span aria-hidden="true">✓</span><span>You won’t see which answers are correct until the end, so just have a go and keep moving.</span></p>
+          </section>
+
+          <div class="mock-intro-footer">
+            <div class="info-box"><span aria-hidden="true">i</span><p>This is an independent practice tool. It is not an official Department for Education service.</p></div>
+            <div class="mock-start">
+              <p><strong>Ready?</strong><span>Your first 3 questions are just a warm-up.</span></p>
+              <button class="button button-primary" id="start-mock" type="button">Start the warm-up <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
         </div>
       </section>
 

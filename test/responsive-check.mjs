@@ -53,7 +53,18 @@ for (const width of [320, 390, 768, 1440]) {
     assert.deepEqual(inputMode, { readOnly: false, inputMode: "numeric" }, "Desktop answer input should remain editable");
   }
 
-  await evaluate("document.querySelector('#open-mock').click(); document.querySelector('#start-mock').click()");
+  await evaluate("document.querySelector('#open-mock').click()");
+  const mockIntro = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth, facts: document.querySelectorAll('.mock-facts > li').length })");
+  assert.ok(mockIntro.scrollWidth <= mockIntro.innerWidth, `Mock intro overflows at ${width}px: ${JSON.stringify(mockIntro)}`);
+  assert.equal(mockIntro.facts, 4, "Mock intro should show four at-a-glance facts");
+
+  if (process.env.CAPTURE_SCREENSHOTS === "1" && (width === 390 || width === 1440)) {
+    const { writeFileSync } = await import("node:fs");
+    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    writeFileSync(`mock-intro-${width}.png`, Buffer.from(shot.data, "base64"));
+  }
+
+  await evaluate("document.querySelector('#start-mock').click()");
   const game = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth })");
   assert.ok(game.scrollWidth <= game.innerWidth, `Game overflows at ${width}px: ${JSON.stringify(game)}`);
 
