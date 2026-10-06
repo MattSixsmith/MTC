@@ -60,6 +60,23 @@ test("accepts only one submission", () => {
   assert.deepEqual(answers, [{ reason: "submitted", answer: "56" }]);
 });
 
+test("captures an answer that is present when time expires", () => {
+  const clock = createClock();
+  const answers = [];
+  let currentAnswer = "5";
+  const cycle = new TimedQuestionCycle({
+    answerMs: 6000,
+    getCurrentAnswer: () => currentAnswer,
+    onAnswerEnd: (result) => answers.push(result),
+    ...clock,
+  });
+  cycle.start();
+  clock.advance(5900);
+  currentAnswer = "56";
+  clock.advance(100);
+  assert.deepEqual(answers, [{ reason: "timeout", answer: "56" }]);
+});
+
 test("a submission at the deadline consistently counts as timed out", () => {
   const clock = createClock();
   const answers = [];

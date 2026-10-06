@@ -54,11 +54,15 @@ for (const width of [320, 390, 768, 1440]) {
   }
 
   await evaluate("document.querySelector('#open-mock').click()");
-  const mockIntro = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth, facts: document.querySelectorAll('.mock-facts > li').length })");
+  const mockIntro = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, facts: document.querySelectorAll('.mock-facts > li').length, startVisible: document.querySelector('#start-mock').getBoundingClientRect().bottom <= innerHeight })");
   assert.ok(mockIntro.scrollWidth <= mockIntro.innerWidth, `Mock intro overflows at ${width}px: ${JSON.stringify(mockIntro)}`);
   assert.equal(mockIntro.facts, 4, "Mock intro should show four at-a-glance facts");
+  if (width === 768) {
+    assert.ok(mockIntro.scrollHeight <= mockIntro.innerHeight, `Mock intro should fit within an iPad viewport: ${JSON.stringify(mockIntro)}`);
+    assert.equal(mockIntro.startVisible, true, "The start button should be visible without scrolling on iPad");
+  }
 
-  if (process.env.CAPTURE_SCREENSHOTS === "1" && (width === 390 || width === 1440)) {
+  if (process.env.CAPTURE_SCREENSHOTS === "1" && (width === 390 || width === 768 || width === 1440)) {
     const { writeFileSync } = await import("node:fs");
     const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     writeFileSync(`mock-intro-${width}.png`, Buffer.from(shot.data, "base64"));
@@ -67,6 +71,16 @@ for (const width of [320, 390, 768, 1440]) {
   await evaluate("document.querySelector('#start-mock').click()");
   const game = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth })");
   assert.ok(game.scrollWidth <= game.innerWidth, `Game overflows at ${width}px: ${JSON.stringify(game)}`);
+
+  if (width === 390) {
+    await evaluate("document.querySelector('[data-key=\"1\"]').click()");
+    await new Promise((resolve) => setTimeout(resolve, 6100));
+    assert.equal(
+      await evaluate("document.querySelector('#pause-kicker').textContent"),
+      "Time is up — answer saved",
+      "An answer entered before timeout should be captured without pressing submit",
+    );
+  }
 
   if (width === 768) {
     await evaluate("document.querySelector('#answer-input').focus(); document.querySelector('#answer-input').dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true }))");

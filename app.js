@@ -50,12 +50,14 @@ const cycle = new TimedQuestionCycle({
   onTick: updateTimer,
   onAnswerEnd: handleTimedAnswerEnd,
   onPauseEnd: advanceMockQuestion,
+  getCurrentAnswer: () => answerInput.value,
 });
 
 function showScreen(screen, { focus = true } = {}) {
   cycle.cancel();
   screens.forEach((item) => { item.hidden = item !== screen; });
   document.body.classList.toggle("is-playing", screen === gameScreen);
+  document.body.classList.toggle("is-mock-intro", screen === mockIntroScreen);
   window.scrollTo(0, 0);
 
   const titles = {
@@ -206,27 +208,34 @@ function handleTimedAnswerEnd({ reason, answer }) {
 
   if (state.mode === "mock") {
     const question = currentQuestion();
+    const rawAnswer = String(answer).trim();
     const numericAnswer = normaliseAnswer(answer);
+    const unanswered = rawAnswer === "";
     state.answers.push({
       ...question,
-      pupilAnswer: reason === "timeout" ? null : numericAnswer,
-      rawAnswer: reason === "timeout" ? "" : String(answer).trim(),
-      correct: reason !== "timeout" && numericAnswer === question.answer,
-      unanswered: reason === "timeout" || String(answer).trim() === "",
+      pupilAnswer: unanswered ? null : numericAnswer,
+      rawAnswer,
+      correct: !unanswered && numericAnswer === question.answer,
+      unanswered,
     });
     lockAnswerUi();
-    showMockPause(reason);
+    showMockPause(reason, !unanswered);
   } else {
     showPracticeFeedback(answer, reason === "timeout");
   }
 }
 
-function showMockPause(reason) {
+function showMockPause(reason, answerWasCaptured) {
   const hasAnotherQuestion = state.index + 1 < state.questions.length;
-  const outcome = reason === "timeout" ? "Time is up." : "Answer saved.";
+  const timedAnswerSaved = reason === "timeout" && answerWasCaptured;
+  const outcome = timedAnswerSaved
+    ? "Time is up — answer saved."
+    : reason === "timeout" ? "Time is up." : "Answer saved.";
   questionStage.hidden = true;
   pauseStage.hidden = false;
-  document.querySelector("#pause-kicker").textContent = reason === "timeout" ? "Time is up" : "Answer saved";
+  document.querySelector("#pause-kicker").textContent = timedAnswerSaved
+    ? "Time is up — answer saved"
+    : reason === "timeout" ? "Time is up" : "Answer saved";
 
   if (hasAnotherQuestion) {
     document.querySelector("#pause-title").textContent = "Next question coming up";
@@ -254,7 +263,8 @@ function showPracticeFeedback(rawAnswer, timedOut) {
   state.acceptingAnswer = false;
   const question = currentQuestion();
   const numericAnswer = normaliseAnswer(rawAnswer);
-  const correct = !timedOut && numericAnswer === question.answer;
+  const unanswered = String(rawAnswer).trim() === "";
+  const correct = !unanswered && numericAnswer === question.answer;
   state.practiceAttempted += 1;
   if (correct) state.practiceCorrect += 1;
 
@@ -264,7 +274,7 @@ function showPracticeFeedback(rawAnswer, timedOut) {
   timerTrack.hidden = true;
   feedback.hidden = false;
   feedback.className = `feedback ${correct ? "is-correct" : "is-incorrect"}`;
-  document.querySelector("#feedback-title").textContent = correct ? "✓ That’s right!" : timedOut ? "○ Time’s up" : "Not quite this time";
+  document.querySelector("#feedback-title").textContent = correct ? "✓ That’s right!" : timedOut && unanswered ? "○ Time’s up" : "Not quite this time";
   document.querySelector("#feedback-detail").textContent = correct
     ? `${question.left} × ${question.right} = ${question.answer}`
     : `The answer is ${question.answer}.`;

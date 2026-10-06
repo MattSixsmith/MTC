@@ -5,6 +5,7 @@ export class TimedQuestionCycle {
     onTick = () => {},
     onAnswerEnd = () => {},
     onPauseEnd = () => {},
+    getCurrentAnswer = () => "",
     now = () => performance.now(),
     setTimer = (callback, delay) => setTimeout(callback, delay),
     clearTimer = (timerId) => clearTimeout(timerId),
@@ -14,6 +15,7 @@ export class TimedQuestionCycle {
     this.onTick = onTick;
     this.onAnswerEnd = onAnswerEnd;
     this.onPauseEnd = onPauseEnd;
+    this.getCurrentAnswer = getCurrentAnswer;
     this.now = now;
     this.setTimer = setTimer;
     this.clearTimer = clearTimer;
@@ -32,7 +34,7 @@ export class TimedQuestionCycle {
   submit(answer) {
     if (this.phase !== "answer") return false;
     if (this.now() >= this.deadline) {
-      this.#endAnswer("timeout", "");
+      this.#endAnswer("timeout", this.getCurrentAnswer());
       return false;
     }
     this.#endAnswer("submitted", answer);
@@ -52,7 +54,7 @@ export class TimedQuestionCycle {
     this.onTick({ phase: this.phase, remainingMs, totalMs });
 
     if (remainingMs <= 0) {
-      if (this.phase === "answer") this.#endAnswer("timeout", "");
+      if (this.phase === "answer") this.#endAnswer("timeout", this.getCurrentAnswer());
       else this.#endPause();
       return;
     }
