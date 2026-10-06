@@ -57,6 +57,7 @@ function showScreen(screen, { focus = true } = {}) {
   cycle.cancel();
   screens.forEach((item) => { item.hidden = item !== screen; });
   document.body.classList.toggle("is-playing", screen === gameScreen);
+  document.body.classList.toggle("is-home", screen === homeScreen);
   document.body.classList.toggle("is-mock-intro", screen === mockIntroScreen);
   document.body.classList.toggle("is-practice-setup", screen === practiceSetupScreen);
   window.scrollTo(0, 0);

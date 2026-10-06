@@ -43,8 +43,19 @@ for (const width of [320, 390, 768, 1440]) {
     : { enabled: false });
   await send("Page.navigate", { url: "http://127.0.0.1:4173" });
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const home = await evaluate("({ innerWidth, scrollWidth: document.documentElement.scrollWidth })");
+  const home = await evaluate("({ innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, actionsVisible: [...document.querySelectorAll('.mode-card button')].every((button) => button.getBoundingClientRect().bottom <= innerHeight) })");
   assert.ok(home.scrollWidth <= home.innerWidth, `Home overflows at ${width}px: ${JSON.stringify(home)}`);
+
+  if (process.env.CAPTURE_SCREENSHOTS === "1" && width === 768) {
+    const { writeFileSync } = await import("node:fs");
+    const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    writeFileSync("home-768.png", Buffer.from(shot.data, "base64"));
+  }
+
+  if (width === 768) {
+    assert.ok(home.scrollHeight <= home.innerHeight, `Home should fit within an iPad viewport: ${JSON.stringify(home)}`);
+    assert.equal(home.actionsVisible, true, "Both home actions should be visible without scrolling on iPad");
+  }
 
   const inputMode = await evaluate("({ readOnly: document.querySelector('#answer-input').readOnly, inputMode: document.querySelector('#answer-input').inputMode })");
   if (width <= 768) {

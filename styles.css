@@ -131,6 +131,23 @@ input:focus-visible,
 
 .home-screen { padding-top: clamp(2.5rem, 6vw, 5rem); }
 
+.is-home .home-screen { padding-block: clamp(1.5rem, 3vw, 2.25rem); }
+.is-home .home-screen h1 {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2.8rem, 7vw, 4.5rem);
+}
+.is-home .number-trail { margin-top: 1rem; }
+.is-home .mode-grid { gap: 1rem; margin-top: 2rem; }
+.is-home .mode-card { padding: 1.4rem; }
+.is-home .card-icon {
+  width: 2.9rem;
+  height: 2.9rem;
+  margin-bottom: 0.9rem;
+  font-size: 1.35rem;
+}
+.is-home .mode-card > p:not(.card-kicker) { margin-bottom: 1.2rem; }
+.is-home .site-footer { padding-block: 1.25rem; }
+
 .home-copy { max-width: 54rem; }
 
 .eyebrow {
@@ -767,7 +784,6 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 }
 
 @media (max-width: 52rem) {
-  .mode-grid { grid-template-columns: 1fr; }
   .question-stage { grid-template-columns: 1fr; align-items: stretch; }
   .keypad { width: min(100%, 24rem); margin-inline: auto; }
   .review-heading { align-items: flex-start; flex-direction: column; gap: 0.6rem; }
@@ -781,6 +797,7 @@ h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
 @media (max-width: 38rem) {
   .site-header { align-items: flex-start; padding-block: 1rem; }
   .brand > span:last-child { max-width: 8rem; line-height: 1.1; }
+  .mode-grid { grid-template-columns: 1fr; }
   .number-trail span:nth-child(3) { display: none; }
   .table-options { grid-template-columns: repeat(4, 1fr); }
   .game-topbar { align-items: flex-start; }
